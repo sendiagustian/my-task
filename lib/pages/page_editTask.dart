@@ -128,7 +128,7 @@ class _EditTaskState extends State<EditTask> {
                     border: InputBorder.none),
               ),
               Padding(
-                padding:EdgeInsets.only(top: 100),
+                padding:EdgeInsets.only(top: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[

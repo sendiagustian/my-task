@@ -15,7 +15,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "CRUD",
+      title: "My Task",
       home: Home(),
       routes: <String, WidgetBuilder> { 
         '/mytask' : (BuildContext context) => MyTask(),

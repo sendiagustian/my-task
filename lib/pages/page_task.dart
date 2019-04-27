@@ -47,16 +47,22 @@ class _MyTaskState extends State<MyTask> {
                         document['duedate'].day.toString() +"/"+ document['duedate'].month.toString()+"/" + document['duedate'].year.toString(),
                         style: TextStyle(fontSize: 16, color: Colors.black),
                       ),
-                      title: Text(
-                        document['title'] ?? '',
-                        style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      subtitle: Text(
-                        document['note'] ?? '',
-                        style: TextStyle(fontSize: 14, color: Colors.black),
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            document['title'] ?? '',
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Padding(padding: EdgeInsets.only(bottom: 10)),
+                          Text(
+                            document['note'] ?? '',
+                            style: TextStyle(fontSize: 14, color: Colors.black),
+                          ),
+                        ],
                       ),
                       trailing: Column(
                         children: <Widget>[
