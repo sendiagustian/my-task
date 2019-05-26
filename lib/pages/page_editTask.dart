@@ -116,6 +116,7 @@ class _EditTaskState extends State<EditTask> {
                 ],
               ),
               TextField(
+                maxLines: 3,
                 controller: controllerNote,
                 onChanged: (String str){
                   setState((){

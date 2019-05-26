@@ -1,9 +1,14 @@
+import 'package:crud/pages/page_detail.dart';
 import 'package:crud/pages/page_addTask.dart';
 import 'package:crud/pages/page_editTask.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MyTask extends StatefulWidget {
+
+  final nama,username,password,dataId;
+  MyTask({this.nama, this.username, this.password, this.dataId});
+
   @override
   _MyTaskState createState() => _MyTaskState();
 }
@@ -20,6 +25,34 @@ class _MyTaskState extends State<MyTask> {
     });
   }
 
+  void _showModalAlert(String title, String content, final index) {
+    AsyncSnapshot<QuerySnapshot> snapshot;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('Yes'),
+              onPressed: () {
+                _deleteTask(index);
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        );
+      }
+    );
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -34,7 +67,9 @@ class _MyTaskState extends State<MyTask> {
         backgroundColor: Colors.indigo,
       ),
       body: StreamBuilder(
-        stream: Firestore.instance.collection('task').snapshots(),
+        stream: Firestore.instance.collection('task')
+        .where('user_id', isEqualTo: widget.dataId)
+        .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) return Text('Loading...');
           return ListView(
@@ -42,10 +77,29 @@ class _MyTaskState extends State<MyTask> {
             return Column(
               children: <Widget>[
                 GestureDetector(
+                  onTap: (){
+                    Navigator.push(context, 
+                      MaterialPageRoute(builder: (context) => DetailTask(
+                        task: document['title'],
+                        note: document['note'],
+                        date: document['duedate'].day.toString() +"/"+ document['duedate'].month.toString()+"/" + document['duedate'].year.toString()
+                      )
+                    ));
+                  },
                   child: ListTile(
-                      leading: Text(
-                        document['duedate'].day.toString() +"/"+ document['duedate'].month.toString()+"/" + document['duedate'].year.toString(),
-                        style: TextStyle(fontSize: 16, color: Colors.black),
+                      leading: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            'Due Date:',
+                            style: TextStyle(fontSize: 10, color: Colors.black, fontWeight: FontWeight.bold)
+                          ),
+                          Text(
+                            document['duedate'].day.toString() +"/"+ document['duedate'].month.toString()+"/" + document['duedate'].year.toString(),
+                            style: TextStyle(fontSize: 12, color: Colors.black),
+                          ),
+                        ],
                       ),
                       title: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,14 +107,22 @@ class _MyTaskState extends State<MyTask> {
                           Text(
                             document['title'] ?? '',
                             style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 16,
                                 color: Colors.black,
-                                fontWeight: FontWeight.bold),
+                                fontWeight: FontWeight.bold
+                              ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           Padding(padding: EdgeInsets.only(bottom: 10)),
                           Text(
                             document['note'] ?? '',
-                            style: TextStyle(fontSize: 14, color: Colors.black),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.black
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ],
                       ),
@@ -85,8 +147,11 @@ class _MyTaskState extends State<MyTask> {
                           InkWell(
                             child: Icon(Icons.delete, size: 20),
                             onTap: (){
-                              final index = document.reference;
-                              _deleteTask(index);
+                              _showModalAlert(
+                                'Peringatan',
+                                'Apakah task ini akan di hapus?',
+                                document.reference
+                              );
                             },
                           ),
                         ],
@@ -102,7 +167,7 @@ class _MyTaskState extends State<MyTask> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(
-              MaterialPageRoute(builder: (BuildContext context) => AddTask()));
+              MaterialPageRoute(builder: (BuildContext context) => AddTask(dataId: widget.dataId,)));
         },
         backgroundColor: Colors.indigo,
         child: Icon(Icons.add),

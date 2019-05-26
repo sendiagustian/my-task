@@ -3,6 +3,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 
 class AddTask extends StatefulWidget {
+  
+  final dataId;
+  AddTask({this.dataId});
+
   @override
   _AddTaskState createState() => _AddTaskState();
 }
@@ -34,6 +38,7 @@ class _AddTaskState extends State<AddTask> {
     Firestore.instance.runTransaction((Transaction transaction) async{
       CollectionReference reference= Firestore.instance.collection('task');
       await reference.add({
+        "user_id" : widget.dataId,
         "title" : newTask,
         "duedate" : _dueDate,
         "note" : note
@@ -93,6 +98,8 @@ class _AddTaskState extends State<AddTask> {
                 ],
               ),
               TextField(
+                // maxLength: 3,
+                maxLines: 3,
                 onChanged: (String str){
                   setState((){
                     note = str;

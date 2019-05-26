@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class Home extends StatefulWidget {
+class SplashScreen extends StatefulWidget {
   @override
-  _HomeState createState() => _HomeState();
+  _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _HomeState extends State<Home> {
+class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() { 
@@ -13,7 +13,7 @@ class _HomeState extends State<Home> {
     Future.delayed(
       Duration(seconds: 2),
       (){
-        Navigator.of(context).pushReplacementNamed("/mytask");
+        Navigator.of(context).pushReplacementNamed("/login");
       }
     );
   }

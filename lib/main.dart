@@ -1,3 +1,5 @@
+import 'package:crud/pages/page_login.dart';
+import 'package:crud/pages/page_register.dart';
 import 'package:crud/pages/page_splahscreen.dart';
 import 'package:crud/pages/page_task.dart';
 import 'package:flutter/material.dart';
@@ -16,9 +18,11 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "My Task",
-      home: Home(),
+      home: SplashScreen(),
       routes: <String, WidgetBuilder> { 
         '/mytask' : (BuildContext context) => MyTask(),
+        '/login' : (BuildContext context) => LoginPage(),
+        '/register' : (BuildContext context) => RegisterPage(),
       }
     );
   }
