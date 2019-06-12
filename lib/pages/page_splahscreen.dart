@@ -1,3 +1,4 @@
+import 'package:crud/pages/references.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -5,7 +6,12 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
+
+PreferenceUtil appData = new PreferenceUtil();
+
 class _SplashScreenState extends State<SplashScreen> {
+
+  bool isLogin = false;
 
   @override
   void initState() { 
@@ -13,9 +19,16 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(
       Duration(seconds: 2),
       (){
-        Navigator.of(context).pushReplacementNamed("/login");
+        isLogin? Navigator.of(context).pushReplacementNamed("/catatanku") : Navigator.of(context).pushReplacementNamed("/login");
       }
     );
+    appData.checkLogin().then((result) {
+      if (result) {
+        setState(() {
+          isLogin = true;
+        });
+      }
+    });
   }
 
   @override

@@ -74,7 +74,7 @@ class _EditTaskState extends State<EditTask> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Edit Task"),
+          title: Text("Edit Catatan"),
           backgroundColor: Colors.indigo,
         ),
         body: Container(

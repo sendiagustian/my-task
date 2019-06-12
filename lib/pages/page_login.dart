@@ -1,4 +1,5 @@
 import 'package:crud/pages/page_task.dart';
+import 'package:crud/pages/references.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -7,24 +8,48 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
+PreferenceUtil appData = new PreferenceUtil();
+
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController controller1 = new TextEditingController();
-  TextEditingController controller2 = new TextEditingController();
+  TextEditingController usernameController = new TextEditingController();
+  TextEditingController passwordController = new TextEditingController();
 
   final Firestore _database = Firestore.instance;
   String nama, username, password;
 
   _getLogin() {
     _database.collection('users').getDocuments().then((docs) {
-      for (int i = 0; i < docs.documents.length; i++) {
-        _initData(docs.documents[i].data, docs.documents[i].documentID);
-      }
+        for (int i = 0; i < docs.documents.length; i++) {
+          _initData(docs.documents[i].data, docs.documents[i].documentID);
+        }
     });
   }
 
+  // _initData(data, dokId) {
+  //   if (username == data['username'] && password == data['password']) {
+  //     setState(() {
+  //       Navigator.pushReplacement(
+  //           context,
+  //           MaterialPageRoute(
+  //             builder: (context) => MyTask(
+  //                   nama: data['nama'],
+  //                   username: data['username'],
+  //                   password: data['password'],
+  //                   dataId: dokId,
+  //                 ),
+  //           ));
+  //     });
+  //   }
+  // }
   _initData(data, dokId) {
-    if (username == data['username'] && password == data['password']) {
+    password = data['password'];
+    if(password == passwordController.text){
+      appData.saveBoolVariable("login", true);
+      appData.saveVariable("nama", data['nama']);
+      appData.saveVariable("username", data['username']);
+      appData.saveVariable("password", data['password']);
       setState(() {
+        nama = "OK";
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -69,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                   padding: EdgeInsets.only(bottom: 20),
                 ),
                 TextField(
-                  controller: controller1,
+                  controller: usernameController,
                   decoration: new InputDecoration(
                     labelText: "Username",
                     fillColor: Colors.white,
@@ -83,7 +108,8 @@ class _LoginPageState extends State<LoginPage> {
                   padding: EdgeInsets.only(bottom: 20),
                 ),
                 TextField(
-                  controller: controller2,
+                  controller: passwordController,
+                  obscureText: true,
                   decoration: new InputDecoration(
                     labelText: "Password",
                     fillColor: Colors.white,
@@ -116,8 +142,8 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                   onPressed: () {
-                    username = controller1.text;
-                    password = controller2.text;
+                    username = usernameController.text;
+                    password = passwordController.text;
                     // _login(username, password);
                     _getLogin();
                   },

@@ -13,6 +13,7 @@ class AddTask extends StatefulWidget {
 
 class _AddTaskState extends State<AddTask> {
   DateTime _dueDate = DateTime.now();
+  DateTime dateNow = DateTime.now();
   String _dateText = '';
 
   String newTask = '';
@@ -41,7 +42,9 @@ class _AddTaskState extends State<AddTask> {
         "user_id" : widget.dataId,
         "title" : newTask,
         "duedate" : _dueDate,
-        "note" : note
+        "note" : note,
+        "tanggal" : "${dateNow.day} / ${dateNow.month} / ${dateNow.year}",
+        "waktu" : "${dateNow.hour}:${dateNow.minute}:${dateNow.second}"
       });
     });
     Navigator.pop(context);
@@ -57,7 +60,7 @@ class _AddTaskState extends State<AddTask> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Add Task"),
+          title: Text("Add Catatan"),
           backgroundColor: Colors.indigo,
         ),
         body: Container(
@@ -71,7 +74,7 @@ class _AddTaskState extends State<AddTask> {
                 },
                 decoration: InputDecoration(
                     icon: Icon(Icons.widgets),
-                    hintText: "New Task",
+                    hintText: "Catatan Baru",
                     border: InputBorder.none),
               ),
               Row(

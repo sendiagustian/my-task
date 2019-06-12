@@ -1,6 +1,7 @@
 import 'package:crud/pages/page_detail.dart';
 import 'package:crud/pages/page_addTask.dart';
 import 'package:crud/pages/page_editTask.dart';
+import 'package:crud/pages/references.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -14,6 +15,7 @@ class MyTask extends StatefulWidget {
 }
 
 List dataTask;
+PreferenceUtil appData = new PreferenceUtil();
 
 class _MyTaskState extends State<MyTask> {
 
@@ -26,7 +28,6 @@ class _MyTaskState extends State<MyTask> {
   }
 
   void _showModalAlert(String title, String content, final index) {
-    AsyncSnapshot<QuerySnapshot> snapshot;
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -53,6 +54,24 @@ class _MyTaskState extends State<MyTask> {
     );
   }
 
+  Widget MyDrawer() {
+    return Drawer(
+      child: ListView(
+        children: <Widget>[
+          ListTile(
+            onTap: (){
+              appData.logout();
+              Navigator.pushReplacementNamed(context, '/login');
+            },
+            title: Text(
+              'Logout'
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -63,12 +82,15 @@ class _MyTaskState extends State<MyTask> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("My Task"),
+        title: Text("Catatan Ku"),
         backgroundColor: Colors.indigo,
       ),
+      drawer: MyDrawer(),
       body: StreamBuilder(
         stream: Firestore.instance.collection('task')
         .where('user_id', isEqualTo: widget.dataId)
+        .orderBy('tanggal', descending: true)
+        .orderBy('waktu', descending: true)
         .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) return Text('Loading...');
@@ -92,7 +114,7 @@ class _MyTaskState extends State<MyTask> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Text(
-                            'Due Date:',
+                            'Tanggal:',
                             style: TextStyle(fontSize: 10, color: Colors.black, fontWeight: FontWeight.bold)
                           ),
                           Text(

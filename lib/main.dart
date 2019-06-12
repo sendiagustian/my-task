@@ -17,10 +17,10 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "My Task",
+      title: "Catatan Ku",
       home: SplashScreen(),
       routes: <String, WidgetBuilder> { 
-        '/mytask' : (BuildContext context) => MyTask(),
+        '/catatanku' : (BuildContext context) => MyTask(),
         '/login' : (BuildContext context) => LoginPage(),
         '/register' : (BuildContext context) => RegisterPage(),
       }

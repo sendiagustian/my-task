@@ -13,7 +13,7 @@ class _DetailTaskState extends State<DetailTask> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Detail Task'),
+        title: Text('Detail Catatan'),
         backgroundColor: Colors.indigo,
       ),
       body: Container(
